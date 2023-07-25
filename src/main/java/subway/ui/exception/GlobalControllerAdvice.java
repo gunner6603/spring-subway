@@ -43,6 +43,7 @@ public class GlobalControllerAdvice {
 
     @ExceptionHandler
     public ResponseEntity<ErrorResponse> handleValidationException(Exception e) {
+        System.out.println(e.getClass());
         return ResponseEntity.internalServerError().body(new ErrorResponse(e.getMessage()));
     }
 

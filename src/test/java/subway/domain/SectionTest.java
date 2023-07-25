@@ -142,8 +142,8 @@ class SectionTest {
         Section upStationSameSection = new Section(lineA, stationA, stationC, 2);
         Section nothingSameSection = new Section(lineA, stationC, stationD, 2);
 
-        assertThat(section.hasSameUpStationOrDownStation(upStationSameSection)).isTrue();
-        assertThat(section.hasSameUpStationOrDownStation(nothingSameSection)).isFalse();
+        assertThat(section.matchEitherStation(upStationSameSection)).isTrue();
+        assertThat(section.matchEitherStation(nothingSameSection)).isFalse();
     }
 
 

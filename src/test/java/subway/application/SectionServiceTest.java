@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -45,7 +44,7 @@ class SectionServiceTest {
         final SectionAdditionRequest request = new SectionAdditionRequest(
             stationA.getId(), stationC.getId(), 3);
         doReturn(Optional.of(lineA)).when(lineDao).findById(lineA.getId());
-        doReturn(sections).when(sectionDao).findAllByLine(lineA);
+        doReturn(sections).when(sectionDao).findAllBy(lineA);
         doReturn(Optional.of(stationA)).when(stationDao).findById(stationA.getId());
         doReturn(Optional.of(stationC)).when(stationDao).findById(stationC.getId());
 
@@ -69,7 +68,7 @@ class SectionServiceTest {
         final Section sectionB = new Section(2L, lineA, stationB, stationC, 5);
         final Sections sections = new Sections(List.of(sectionA, sectionB));
         doReturn(Optional.of(lineA)).when(lineDao).findById(lineA.getId());
-        doReturn(sections).when(sectionDao).findAllByLine(lineA);
+        doReturn(sections).when(sectionDao).findAllBy(lineA);
         doReturn(Optional.of(stationC)).when(stationDao).findById(stationC.getId());
 
         //when

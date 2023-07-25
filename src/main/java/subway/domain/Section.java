@@ -50,7 +50,7 @@ public class Section {
             station);
     }
 
-    public boolean hasSameUpStationOrDownStation(Section section) {
+    public boolean matchEitherStation(Section section) {
         return this.upStation.equals(section.upStation) || this.downStation.equals(
             section.downStation);
     }
@@ -59,11 +59,11 @@ public class Section {
 
         validateLongerDistanceThan(section);
 
-        if (isOnlyUpStationMatch(section)) {
+        if (matchUpperPart(section)) {
             return mergeUp(section);
         }
 
-        if (isOnlyDownStationMatch(section)) {
+        if (matchLowerPart(section)) {
             return mergeDown(section);
         }
 
@@ -71,7 +71,23 @@ public class Section {
             "추가할 구간의 상행역 하행역이 모두 같거나 모두 다를 수 없습니다. 기존 구간: " + this + " 추가할 구간: " + section);
     }
 
-    private boolean isOnlyUpStationMatch(Section section) {
+    public Section cutBy(Section other) {
+
+        validateLongerDistanceThan(other);
+
+        if (matchUpperPart(other)) {
+            return cutUpperPartBy(other);
+        }
+
+        if (matchLowerPart(other)) {
+            return cutLowerPartBy(other);
+        }
+
+        throw new IllegalArgumentException(
+            "잘라낼 구간의 상행역 하행역이 모두 같거나 모두 다를 수 없습니다. 기존 구간: " + this + " 잘라낼 구간: " + other);
+    }
+
+    private boolean matchUpperPart(Section section) {
         return section.upStation.equals(this.upStation) && !section.downStation.equals(
             this.downStation);
     }
@@ -84,7 +100,12 @@ public class Section {
         return mergedSections;
     }
 
-    private boolean isOnlyDownStationMatch(Section section) {
+    private Section cutUpperPartBy(Section section) {
+        return new Section(this.id, section.line, section.downStation, this.downStation,
+            this.distance - section.distance);
+    }
+
+    private boolean matchLowerPart(Section section) {
         return !section.upStation.equals(this.upStation) && section.downStation.equals(
             this.downStation);
     }
@@ -95,6 +116,11 @@ public class Section {
             this.distance - section.distance));
         mergedSections.add(section);
         return mergedSections;
+    }
+
+    private Section cutLowerPartBy(Section section) {
+        return new Section(this.id, section.line, this.upStation, section.upStation,
+            this.distance - section.distance);
     }
 
     private void validateLongerDistanceThan(Section section) {
@@ -129,6 +155,18 @@ public class Section {
 
     public boolean belongTo(Line line) {
         return this.line.equals(line);
+    }
+
+    public boolean isUpStation(Station station) {
+        return upStation.equals(station);
+    }
+
+    public boolean isDownStation(Station station) {
+        return downStation.equals(station);
+    }
+
+    public boolean isLongerThan(int distance) {
+        return this.distance > distance;
     }
 
     @Override
